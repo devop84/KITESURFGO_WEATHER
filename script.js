@@ -1,4 +1,3 @@
-
 const toggleSelectLocation = document.getElementById('toggle-select-location');
 const selectLocation = document.querySelector('.select-location');
 
@@ -35,25 +34,12 @@ inputLocation.addEventListener('focus', () => {
   inputLocation.select();
 });
 
-const fetchAPI = async () => {
+const fetchAPI = () => {
+
+
 
   // MAKE THIS PART SAFER !!!
-
-  let inputValue;
-
-  try {
-    if (typeof inputValue === "undefined") {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const data = await response.json();
-      console.log(data.ip);
-      inputValue = data.ip;
-    } else {
-      inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace
-    }
-  } catch (error) {
-    console.error(error);
-    // handle the error in a way that makes sense for your application
-  }
+  const inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace 
 
   fetch(`https://api.weatherapi.com/v1/current.json?key=f44e471964df45d79da184125231904&q=${inputValue}`)
     .then(response => response.json())
