@@ -1,9 +1,13 @@
+// toggle button to select location
+
 const toggleSelectLocation = document.getElementById('toggle-select-location');
 const selectLocation = document.querySelector('.select-location');
 
 toggleSelectLocation.addEventListener('click', () => {
   selectLocation.classList.toggle('display-select-location');
 });
+
+// button to set device gps coordinates inside input_location field
 
 const myLocation = document.getElementById('my_location');
 
@@ -18,32 +22,46 @@ function getLocation() {
 }
 
 function setPosition(position) {
+  console.log(position);
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
-  const inputField = document.querySelector('input[type="text"]');
+  const inputField = document.getElementById('input_location');
   inputField.value = `${latitude},${longitude}`;
+  console.log(inputField.value)
 }
 
+// fetching API results
 
 
-const submitLocation = document.getElementById('submit_location');
-const refreshLocation = document.getElementById('refresh_location');
-const inputLocation = document.getElementById('input_location');
+const submitLocation = document.getElementById('submit_location'); //submit button
+const refreshLocation = document.getElementById('refresh_location'); //redresh button
+const inputLocation = document.getElementById('input_location'); // input location field
 
 inputLocation.addEventListener('focus', () => {
   inputLocation.select();
 });
 
-const fetchAPI = () => {
 
-  // MAKE THIS PART SAFER !!!
-  const inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace 
+function getIpAddress() {
+  return fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => data.ip)
+    .catch(error => {
+      console.error('Error fetching IP address:', error);
+    });
+}
+
+
+fetchAPI = () => {
+
+  inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace 
+
 
   fetch(`https://api.weatherapi.com/v1/current.json?key=f44e471964df45d79da184125231904&q=${inputValue}`)
     .then(response => response.json())
     .then(data => {
       const name = data.location.name;
-      const lastUpdated = data.current.last_updated;
+      const lastUpdated = data.location.localtime;
       const tempC = data.current.temp_c;
       const icon = data.current.condition.icon;
       const windKph = data.current.wind_kph;
@@ -88,12 +106,23 @@ const fetchAPI = () => {
 
       const currentLastUpdated = document.getElementById("last_update");
       currentLastUpdated.textContent = lastUpdated;
+      
     })
     .catch(error => console.error(error));
     selectLocation.classList.remove('display-select-location');
 };
 
-fetchAPI();
+
+// Call getIpAddress first to get the IP address, then call fetchAPI with the IP address as a parameter
+getIpAddress()
+  .then(ipAddress => {
+    if (inputLocation.value.trim() === '') {
+      inputLocation.value = ipAddress;
+      fetchAPI(ipAddress);
+    } else {
+      fetchAPI(inputLocation.value.trim());
+    }
+  });
 
 submitLocation.addEventListener('click', fetchAPI);
 refreshLocation.addEventListener('click', fetchAPI);
