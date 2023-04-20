@@ -165,12 +165,15 @@ body {
     font-size: 24px;
 }
 .select-location {
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 0px;
     gap:16px;
+    display:none;
+}
+.display-select-location {
+    display: flex;
 }
 .form {
     display: flex;
