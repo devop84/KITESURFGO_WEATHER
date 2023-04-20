@@ -60,6 +60,7 @@ body {
     width:100%;
     max-width: 450px;
 }
+
 .location {
     display: flex;
     flex-direction: row;
@@ -208,4 +209,19 @@ body {
     color:#FFF;
     mix-blend-mode: overlay;
     font-size: 16px;
+}
+.time {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    width: 100%;
+    font-size: 16px;
+    color: #FFF;
+    mix-blend-mode: overlay;
+    gap:8px;
+}
+.time i {
+    font-size: 32px;
+    cursor: pointer;
 }
