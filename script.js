@@ -36,6 +36,10 @@ const submitLocation = document.getElementById('submit_location');
 const refreshLocation = document.getElementById('refresh_location');
 const inputLocation = document.getElementById('input_location');
 
+inputLocation.addEventListener('focus', () => {
+  inputLocation.select();
+});
+
 const fetchAPI = () => {
 
   // MAKE THIS PART SAFER !!!
