@@ -65,7 +65,7 @@ const fetchAPI = () => {
       conditionWindDir.textContent = windDir;
 
       const conditionWindKn = document.getElementById("wind_kn");
-      conditionWindKn.textContent = windKn;
+      conditionWindKn.textContent = windKn + " kn";
 
       const currentLastUpdated = document.getElementById("last_update");
       currentLastUpdated.textContent = lastUpdated;
