@@ -54,6 +54,27 @@ const fetchAPI = () => {
 
       const windKn = (windKph * 0.539957).toFixed(1);
 
+      function getWindArrow(windDegree) {
+        const arrows = [
+          "north",
+          "north_east",
+          "east",
+          "south_east",
+          "south",
+          "south_west",
+          "west",
+          "north_west"
+        ];
+        
+        const index = Math.round((windDegree % 360) / 45);
+        const oppositeIndex = (index + 4) % 8;
+        
+        return arrows[oppositeIndex];
+      }
+      const windArrow = getWindArrow(windDegree);
+      const conditionWindArrow = document.getElementById("wind_arrow");
+      conditionWindArrow.textContent = windArrow;
+
       const locationName = document.getElementById("location_name");
       locationName.textContent = name;
 
