@@ -52,6 +52,8 @@ const fetchAPI = () => {
       const windDegree = data.current.wind_degree;
       const windDir = data.current.wind_dir;
 
+      const windKn = (windKph * 0.539957).toFixed(1);
+
       const locationName = document.getElementById("location_name");
       locationName.textContent = name;
 
@@ -62,8 +64,8 @@ const fetchAPI = () => {
       const conditionWindDir = document.getElementById("wind_dir");
       conditionWindDir.textContent = windDir;
 
-      const conditionWindKph = document.getElementById("wind_kph");
-      conditionWindKph.textContent = windKph;
+      const conditionWindKn = document.getElementById("wind_kn");
+      conditionWindKn.textContent = windKn;
 
       const currentLastUpdated = document.getElementById("last_update");
       currentLastUpdated.textContent = lastUpdated;
