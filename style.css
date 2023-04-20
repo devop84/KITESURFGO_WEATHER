@@ -134,3 +134,29 @@ body {
     font-weight: 600;
     font-size: 32px;
 }
+.tides {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 16px;
+    gap: 32px;
+}
+.levels {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    color: #FFF;
+}
+.levels h3 {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+}
+.levels td {
+    font-size: 16px;
+    padding: 8px;
+}
