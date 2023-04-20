@@ -1,3 +1,4 @@
+
 const toggleSelectLocation = document.getElementById('toggle-select-location');
 const selectLocation = document.querySelector('.select-location');
 
@@ -24,13 +25,7 @@ function setPosition(position) {
   inputField.value = `${latitude},${longitude}`;
 }
 
-fetch('https://api.ipify.org?format=json')
-  .then(response => response.json())
-  .then(data => {
-    const inputLocation = document.getElementById('input_location');
-    inputLocation.textContent = data.ip;
-  })
-  .catch(error => console.error(error));
+
 
 const submitLocation = document.getElementById('submit_location');
 const refreshLocation = document.getElementById('refresh_location');
@@ -40,11 +35,26 @@ inputLocation.addEventListener('focus', () => {
   inputLocation.select();
 });
 
-const fetchAPI = () => {
+const fetchAPI = async () => {
 
   // MAKE THIS PART SAFER !!!
-  const inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace 
-  
+
+  let inputValue;
+
+  try {
+    if (typeof inputValue === "undefined") {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      console.log(data.ip);
+      inputValue = data.ip;
+    } else {
+      inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace
+    }
+  } catch (error) {
+    console.error(error);
+    // handle the error in a way that makes sense for your application
+  }
+
   fetch(`https://api.weatherapi.com/v1/current.json?key=f44e471964df45d79da184125231904&q=${inputValue}`)
     .then(response => response.json())
     .then(data => {
@@ -100,5 +110,7 @@ const fetchAPI = () => {
 };
 
 fetchAPI();
+
 submitLocation.addEventListener('click', fetchAPI);
 refreshLocation.addEventListener('click', fetchAPI);
+
