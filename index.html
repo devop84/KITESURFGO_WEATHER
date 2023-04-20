@@ -18,25 +18,25 @@
     <div class="weather">
         
         <div class="location">
-            <img src="img/113.webp" alt="">
-            <h2>ATINS</h2>
+            <img id="condition_icon" src="img/113.webp" alt="">
+            <h2 id="location_name"></h2>
             <i class="material-symbols-outlined" id="toggle-select-location">explore</i>
         </div>
         <div class="select-location">
             <div class="form">
                 <i class="material-symbols-outlined" id="my_location">my_location</i>
-                <input type="text" value="" placeholder="city name or gps coordinates">
-                <i class="material-symbols-outlined">check_circle</i>
+                <input type="text" id="input_location" value="181.220.228.30" placeholder="city name or gps coordinates">
+                <i class="material-symbols-outlined submit_location" id="submit_location">check_circle</i>
             </div>
         </div>
         <div class="wind">
             <div class="wind-direction">
                 <i class="material-symbols-outlined">south_west</i>
-                <h3>NE</h3>
+                <h3 id="wind_dir"></h3>
             </div>
             <div class="wind-speed">
                 <i class="material-symbols-outlined">arrow_drop_up</i>
-                <h3>16 kn</h3>
+                <h3 id="wind_kph"></h3>
             </div>
         </div>
         <div class="tides">
@@ -65,8 +65,8 @@
             </div>
         </div>
         <div class="time">
-            <h4>AT 13:37</h4>
-            <i class="material-symbols-outlined refresh">refresh</i>
+            <h4 id="last_update"></h4>
+            <i class="material-symbols-outlined refresh" id="refresh_location">refresh</i>
         </div>
     </div>
 </body>
