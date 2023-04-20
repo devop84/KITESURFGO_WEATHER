@@ -36,8 +36,6 @@ inputLocation.addEventListener('focus', () => {
 
 const fetchAPI = () => {
 
-
-
   // MAKE THIS PART SAFER !!!
   const inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace 
 
