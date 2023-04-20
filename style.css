@@ -36,7 +36,7 @@ body {
 .logo img {
     width: 48px;
     height: 48px;
-    border-radius: 20px;
+    border-radius: 16px;
 }
 .logo h1 {
     font-family: 'Poppins SemiBold';
@@ -56,7 +56,7 @@ body {
     gap: 16px;
     background: linear-gradient(170deg, rgba(255, 255, 255, 0.1) 50%, rgba(0, 0, 0, 0.1) 150%);
     background-blend-mode: overlay;
-    border-radius: 20px;
+    border-radius: 16px;
     width:100%;
     max-width: 450px;
 }
@@ -112,6 +112,23 @@ body {
     font-size: 32px;
 }
 .wind-direction h3 {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+}
+.wind-speed {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    color: #FFF;
+}
+.wind-speed i {
+    font-size: 32px;
+    color: greenyellow;
+}
+.wind-speed h3 {
     font-family: 'Poppins';
     font-style: normal;
     font-weight: 600;
