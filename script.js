@@ -42,16 +42,7 @@ async function getIpAddress() {
 // Function to determine the wind direction arrow based on the wind degree
 function getWindArrow(windDegree) {
   // An array of CSS class names for the wind direction arrows
-  const arrows = [
-    "north",
-    "north_east",
-    "east",
-    "south_east",
-    "south",
-    "south_west",
-    "west",
-    "north_west"
-  ];
+  const arrows = ["north","north_east","east","south_east","south","south_west","west","north_west"];
   
   // Calculate the index of the arrow to use based on the wind degree
   const index = Math.round((windDegree % 360) / 45);
