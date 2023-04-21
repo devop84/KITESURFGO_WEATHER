@@ -227,3 +227,13 @@ body {
     font-size: 32px;
     cursor: pointer;
 }
+
+
+.tides_test {
+    display: flex;
+    width: 100%;
+}
+.tides_test img {
+    display: flex;
+    width: 100%;
+}
