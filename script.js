@@ -32,7 +32,6 @@ function setPosition(position) {
 
 // fetching API results
 
-
 const submitLocation = document.getElementById('submit_location'); //submit button
 const refreshLocation = document.getElementById('refresh_location'); //redresh button
 const inputLocation = document.getElementById('input_location'); // input location field
@@ -51,11 +50,9 @@ function getIpAddress() {
     });
 }
 
-
 fetchAPI = () => {
 
   inputValue = inputLocation.value.trim(); // get the user input value and remove whitespace 
-
 
   fetch(`https://api.weatherapi.com/v1/current.json?key=f44e471964df45d79da184125231904&q=${inputValue}`)
     .then(response => response.json())
@@ -112,8 +109,8 @@ fetchAPI = () => {
     selectLocation.classList.remove('display-select-location');
 };
 
-
 // Call getIpAddress first to get the IP address, then call fetchAPI with the IP address as a parameter
+
 getIpAddress()
   .then(ipAddress => {
     if (inputLocation.value.trim() === '') {
