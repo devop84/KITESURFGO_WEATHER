@@ -46,48 +46,117 @@
 
 
 
-        <div>
-          <canvas id="myChart"></canvas>
-        </div>
+
         
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        
+        <canvas id="tide-chart"></canvas>
         <script>
-          const ctx = document.getElementById('myChart');
-        
-        
-          const myChart = new Chart(ctx, {
+          function getTideHeight(tideData, datetimeStr) {
+            const datetime = new Date(datetimeStr);
+            for (let i = 0; i < tideData.length - 1; i++) {
+              const currentTide = tideData[i];
+              const nextTide = tideData[i + 1];
+              const currentTideTime = new Date(currentTide.datetime);
+              const nextTideTime = new Date(nextTide.datetime);
+              if (currentTideTime <= datetime && datetime < nextTideTime) {
+                // Interpolate tide height using a sinusoidal function between two neighboring tides
+                const timeDiff = nextTideTime - currentTideTime;
+                const heightDiff = nextTide.height - currentTide.height;
+                const timeSinceLastTide = datetime - currentTideTime;
+                const fractionOfTime = timeSinceLastTide / timeDiff;
+                const tideHeight = currentTide.height + heightDiff * (Math.sin(Math.PI * fractionOfTime - Math.PI / 2) + 1) / 2;
+                return tideHeight;
+              }
+            }
+            // If the datetime is after the last tide, return the height of the last tide
+            return tideData[tideData.length - 1].height;
+          }
+      
+          const tideData = [
+            {
+              "timestamp": 1682204552,
+              "height": -1.7772909106,
+              "state": "LOW TIDE",
+              "datetime": "2023-04-22T23:02:32+00:00"
+            },
+            {
+              "timestamp": 1682227303,
+              "height": 1.5390116396,
+              "state": "HIGH TIDE",
+              "datetime": "2023-04-23T05:21:43+00:00"
+            },
+            {
+              "timestamp": 1682248693,
+              "height": -1.5165860946,
+              "state": "LOW TIDE",
+              "datetime": "2023-04-23T11:18:13+00:00"
+            },
+            {
+              "timestamp": 1682271166,
+              "height": 1.5183191763,
+              "state": "HIGH TIDE",
+              "datetime": "2023-04-23T17:32:46+00:00"
+            },
+            {
+              "timestamp": 1682204552,
+              "height": -1.7772909106,
+              "state": "LOW TIDE",
+              "datetime": "2023-04-24T01:02:32+00:00"
+            }
+          ];
+      
+          const labels = [];
+          const data = [];
+      
+          // Generate tide height data for each hour of the day
+          for (let i = 0; i < 24 * 60; i++) {
+        const datetime = new Date(`2023-04-23T${Math.floor(i / 60).toString().padStart(2, "0")}:${(i % 60).toString().padStart(2, "0")}:00+00:00`);
+        const tideHeight = getTideHeight(tideData, datetime.toISOString());
+        labels.push(`${Math.floor(i / 60).toString().padStart(2, "0")}:${(i % 60).toString().padStart(2, "0")}`);
+        data.push(tideHeight);
+      }
+      
+          const ctx = document.getElementById('tide-chart').getContext('2d');
+          const chart = new Chart(ctx, {
             type: 'line',
             data: {
-              labels: ["2023-04-22T00:00:00+00:00", "2023-04-22T06:00:00+00:00", "2023-04-22T12:00:00+00:00", "2023-04-22T18:00:00+00:00"],
+              labels: labels,
               datasets: [{
-                label: '# of Votes',
-                data: [6, -1, 5.8, -0.8],
-                borderWidth: 1,
-                tension: 0.3,
-                pointRadius: 16,
+                label: 'Tide Height',
+                data: data,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
               }]
             },
             options: {
-              plugins: {
-                legend: {
-                  display:false,
-                },
-              },
               scales: {
                 x: {
-                  display: false
+                  ticks: {
+                    display: true
+                  },
+                  grid: {
+                    display: false
+                  }
                 },
                 y: {
-                  display: false,
-                  beginAtZero: true
+                  ticks: {
+                    display: true
+                  }
                 }
               },
-            },
+              plugins: {
+                title: {
+                  display: false
+                },
+                legend: {
+                  display: false
+                },
+                gridLines: {
+                  display:false
+                }
+              }
+            }
           });
-        </script>
-        
-          
+      </script>
           
           
 
