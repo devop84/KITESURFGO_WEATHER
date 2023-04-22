@@ -1,94 +1,40 @@
-const url = 'https://www.worldtides.info/api/v3?heights&date=2023-04-21&lat=-2.5173892&lon=-44.2194533&key=c9d913ab-11f3-46c6-8a63-0c299af24f47';
 
-// -2.5173892,-44.2194533
-// lat=-2.5173892&lon=-44.2194533
+var data = {
+  labels: ["2023-04-22T23:02:32+00:00", "2023-04-23T05:21:43+00:00", "2023-04-23T11:18:13+00:00", "2023-04-23T17:32:46+00:00"],
+  datasets: [{
+      label: "Height",
+      data: [-1.7772909106, 1.5390116396, -1.5165860946, 1.5183191763],
+      fill: false,
+      borderColor: "rgb(75, 192, 192)",
+      lineTension: 0.1
+  }]
+};
 
-fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    const times = data.heights.map(d => new Date(d.date).toLocaleTimeString());
-    const heights = data.heights.map(d => d.height);
-
-    const canvas = document.getElementById('my-chart');
-    const ctx = canvas.getContext('2d');
-    
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: times,
-        datasets: [{
-          label: 'Height',
-          data: heights,
-          borderColor: 'blue',
-          borderWidth: 1,
-          pointRadius: 0,
-          showLine: true,
-        }]
+var options = {
+scales: {
+  xAxes: [{
+      type: 'time',
+      time: {
+          displayFormats: {
+              hour: 'h:mm a'
+          },
+          display: false // add this line
       },
-      options: {
-        plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            enabled: false,
-          }
-        },
-        scales: {
-          x: {
-            ticks: {
-              display: false
-            },
-            grid: {
-              display: false,
-            },
-          },
-          y: {
-            ticks: {
-              display: false
-            },
-            grid: {
-              display: false,
-            },
-            beginAtZero: true,
-          },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-      },
-
-    });
-
-    const dragBar = document.querySelector('.drag-bar');
-    const infoDiv = document.getElementById('info');
-    let isDragging = false;
-
-    dragBar.addEventListener('mousedown', function (event) {
-      isDragging = true;
-    });
-
-    document.addEventListener('mousemove', function (event) {
-      if (isDragging) {
-        const containerWidth = document.querySelector('.chart-container').offsetWidth;
-        const barWidth = dragBar.offsetWidth;
-        const barHalfWidth = barWidth / 2;
-        const chartLeft = canvas.getBoundingClientRect().left;
-        const chartRight = canvas.getBoundingClientRect().right;
-        let barLeft = event.clientX - chartLeft - barHalfWidth;
-        barLeft = Math.max(barLeft, 0);
-        barLeft = Math.min(barLeft, containerWidth - barWidth);
-        dragBar.style.left = barLeft + 'px';
-        const dataIndex = Math.round((barLeft + barHalfWidth) / containerWidth * (data.heights.length - 1));
-        const time = data.heights[dataIndex].date;
-        const height = data.heights[dataIndex].height;
-        infoDiv.innerHTML = `${time}: ${height.toFixed(2)}m`;
+      scaleLabel: {
+          display: false,
+          labelString: 'Time'
       }
-    });
-
-    document.addEventListener('mouseup', function (event) {
-      isDragging = false;
-    });
-
-    
-  })
-  .catch(error => console.error(error));
+  }],
+  yAxes: [{
+      scaleLabel: {
+          display: true,
+          labelString: 'Height',
+      }
+  }]
+},
+plugins: {
+  legend: {
+      display:false,
+  }
+}
+};

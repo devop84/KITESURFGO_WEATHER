@@ -1,29 +1,70 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Display Base64-encoded PNG image</title>
-  <link rel="stylesheet" href="test.css">
-</head>
-<body>
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+
+// chart plugins
+
+const currentTimePlugin = {
+  id: 'currentTime',
+  afterDraw: chart => {
+    const time = new Date().toISOString();
+    const { left, right, top, bottom } = chart.chartArea;
+    const x = chart.scales.x.getPixelForValue(time);
+    chart.ctx.beginPath();
+    chart.ctx.moveTo(x, top);
+    chart.ctx.lineTo(x, bottom);
+    chart.ctx.strokeStyle = 'red';
+    chart.ctx.lineWidth = 2;
+    chart.ctx.stroke();
+  }
+};
 
 
 
-    <div class="chart-container">
-        <canvas id="my-chart"></canvas>
-        <div class="drag-bar"></div>
-        <div id="info"></div>
-    </div>
+  const ctx = document.getElementById('myChart');
 
-    <iframe src="https://marea.ooo/en/widget/-2.5173892/-44.2194533"
-    style="background-color: transparent"
-    width="100%"
-    height="500px"></iframe>
-    
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ["2023-04-22T00:00:00+00:00", "2023-04-22T06:00:00+00:00", "2023-04-22T12:00:00+00:00", "2023-04-22T18:00:00+00:00"],
+      // labels: [1,2,3,4],
+      datasets: [{
+        label: '# of Votes',
+        data: [6, -1, 5.8, -0.8],
+        borderWidth: 1,
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          display:false,
+        },
+        currentTime: {
+          display: true
+        }
+      },
+      scales: {
+        x: {
+          display: false
+        },
+        y: {
+          display: false,
+          beginAtZero: true
+        }
+        
+      },
+    },
+    plugins: [currentTimePlugin]
+  });
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="test.js"></script>
-</body>
-</html>
 
+
+</script>
 
 

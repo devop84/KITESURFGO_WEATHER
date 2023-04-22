@@ -65,6 +65,8 @@ async function fetchAPI() {
 
     // Extract relevant data from the API response
     const name = data.location.name;
+    const lat = data.location.lat;
+    const lon = data.location.lon;
     const lastUpdated = data.location.localtime;
     const tempC = data.current.temp_c;
     const icon = data.current.condition.icon;
@@ -85,6 +87,90 @@ async function fetchAPI() {
     conditionWindArrow.textContent = windArrow;
     currentLastUpdated.textContent = lastUpdated;
     
+
+    // Fetch data from api.marea.ooo
+
+    const proxyUrl = "https://api.allorigins.win/get?url=";
+    const apiUrl = `https://api.marea.ooo/v2/tides?token=46d1e2c4-61de-40d6-b662-e07154962079&latitude=44.414&longitude=-2.097`;
+    const apiUrlWithProxy = `${proxyUrl}${encodeURIComponent(apiUrl)}`;
+
+    fetch(apiUrlWithProxy)
+      .then(response => response.json())
+      .then(datamarea => {
+        // Do something with the data here
+        const dataMarea = JSON.parse(datamarea.contents);
+        const extremes = dataMarea.extremes;
+        console.log(extremes);
+
+
+
+
+
+      var data = {
+        labels: ["2023-04-22T23:02:32+00:00", "2023-04-23T05:21:43+00:00", "2023-04-23T11:18:13+00:00", "2023-04-23T17:32:46+00:00"],
+        datasets: [{
+            label: "Height",
+            data: [-1.7772909106, 1.5390116396, -1.5165860946, 1.5183191763],
+            fill: false,
+            borderColor: "rgb(75, 192, 192)",
+            lineTension: 0.1
+        }]
+      };
+      
+var options = {
+    scales: {
+        xAxes: [{
+            type: 'time',
+            time: {
+                displayFormats: {
+                    hour: 'h:mm a'
+                },
+                display: false // add this line
+            },
+            scaleLabel: {
+                display: false,
+                labelString: 'Time'
+            }
+        }],
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'Height',
+            }
+        }]
+    },
+    plugins: {
+        legend: {
+            display:false,
+        }
+    }
+};
+
+      
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myChart = new Chart(ctx, {
+          type: 'line',
+          data: data,
+          options: options
+      });
+      
+
+
+
+
+
+
+
+
+
+
+
+      })
+      .catch(error => console.error(error));
+
+
+      
+
     selectLocation.classList.remove('display-select-location');
   } catch (error) {
     console.error(error);

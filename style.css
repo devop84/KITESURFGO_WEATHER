@@ -129,8 +129,7 @@ body {
     font-size: 32px;
 }
 .tides {
-    /* display: flex; */
-    display: none;
+    display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -226,14 +225,4 @@ body {
 .time i {
     font-size: 32px;
     cursor: pointer;
-}
-
-
-.tides_test {
-    display: flex;
-    width: 100%;
-}
-.tides_test img {
-    display: flex;
-    width: 100%;
 }
