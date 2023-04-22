@@ -46,75 +46,47 @@
 
 
 
-
         <div>
-            <canvas id="myChart"></canvas>
-          </div>
-          
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          
-          <script>
-          
-          
-          // chart plugins
-          
-          const currentTimePlugin = {
-            id: 'currentTime',
-            afterDraw: chart => {
-              const time = new Date().toISOString();
-              const { left, right, top, bottom } = chart.chartArea;
-              const x = chart.scales.x.getPixelForValue(time);
-              chart.ctx.beginPath();
-              chart.ctx.moveTo(x, top);
-              chart.ctx.lineTo(x, bottom);
-              chart.ctx.strokeStyle = 'red';
-              chart.ctx.lineWidth = 2;
-              chart.ctx.stroke();
-            }
-          };
-          
-          
-          
-            const ctx = document.getElementById('myChart');
-          
-            new Chart(ctx, {
-              type: 'line',
-              data: {
-                labels: ["2023-04-22T00:00:00+00:00", "2023-04-22T06:00:00+00:00", "2023-04-22T12:00:00+00:00", "2023-04-22T18:00:00+00:00"],
-                // labels: [1,2,3,4],
-                datasets: [{
-                  label: '# of Votes',
-                  data: [6, -1, 5.8, -0.8],
-                  borderWidth: 1,
-                  tension: 0.3
-                }]
-              },
-              options: {
-                plugins: {
-                  legend: {
-                    display:false,
-                  },
-                  currentTime: {
-                    display: true
-                  }
-                },
-                scales: {
-                  x: {
-                    display: false
-                  },
-                  y: {
-                    display: false,
-                    beginAtZero: true
-                  }
-                  
+          <canvas id="myChart"></canvas>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
+        <script>
+          const ctx = document.getElementById('myChart');
+        
+        
+          const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ["2023-04-22T00:00:00+00:00", "2023-04-22T06:00:00+00:00", "2023-04-22T12:00:00+00:00", "2023-04-22T18:00:00+00:00"],
+              datasets: [{
+                label: '# of Votes',
+                data: [6, -1, 5.8, -0.8],
+                borderWidth: 1,
+                tension: 0.3,
+                pointRadius: 16,
+              }]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display:false,
                 },
               },
-              plugins: [currentTimePlugin]
-            });
-          
-          
-          
-          </script>
+              scales: {
+                x: {
+                  display: false
+                },
+                y: {
+                  display: false,
+                  beginAtZero: true
+                }
+              },
+            },
+          });
+        </script>
+        
           
           
           
