@@ -15,12 +15,17 @@ const currentTimePlugin = {
     const time = new Date().toISOString();
     const { left, right, top, bottom } = chart.chartArea;
     const x = chart.scales.x.getPixelForValue(time);
+    const y = chart.scales.y.getPixelForValue(chart.data.datasets[0].data[0]);
     chart.ctx.beginPath();
     chart.ctx.moveTo(x, top);
     chart.ctx.lineTo(x, bottom);
     chart.ctx.strokeStyle = 'red';
     chart.ctx.lineWidth = 2;
     chart.ctx.stroke();
+    chart.ctx.beginPath();
+    chart.ctx.arc(x, y, 5, 0, Math.PI * 2);
+    chart.ctx.fillStyle = 'red';
+    chart.ctx.fill();
   }
 };
 
