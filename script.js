@@ -99,7 +99,7 @@ async function fetchAPI() {
       // const lon = '-42.744428410495985';
 
       const proxyUrl = "https://api.allorigins.win/get?url=";
-      const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}`;
+      const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=1`;
       const apiUrlWithProxy = `${proxyUrl}${encodeURIComponent(apiUrl)}`;
 
 
@@ -109,7 +109,6 @@ async function fetchAPI() {
       .then(datamarea => {
         const dataMarea = JSON.parse(datamarea.contents);
         const tideData = dataMarea.heights;
-        console.log(tideData);
 
         // Convert datetime into local time
         const tideDataLocal = tideData.map((data) => {
@@ -117,7 +116,7 @@ async function fetchAPI() {
           return {...data, datetimeLocal: datetimeLocal};
         });
 
-
+        const nowhhmm = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
 
         function createChart(data) {
@@ -143,6 +142,7 @@ async function fetchAPI() {
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1,
                 lineTension: 0.4,
+                pointHitRadius:10,
               }]
             },
             options: {
@@ -155,19 +155,20 @@ async function fetchAPI() {
                     type: 'line',
                     mode: 'vertical',
                     scaleID: 'x',
-                    value: '10:00', // Replace with the date where you want to add the vertical bar
+                    value: nowhhmm, // Replace with the date where you want to add the vertical bar
                     borderColor: 'black',
                     borderWidth: 1,
                     label: {
                       enabled: true,
                       position: 'top',
                       content: 'Vertical Bar',
-                    }
+                    },
                   }]
                 }
               },
               scales: {
                 x: {
+                  // type: 'time',
                   grid: {
                     display: false,
                   }

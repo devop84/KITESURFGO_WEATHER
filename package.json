@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "chartjs-plugin-annotation": "^2.2.1"
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-annotation": "^2.2.1",
+    "date-fns": "^2.29.3"
   }
 }
