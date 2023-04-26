@@ -156,8 +156,8 @@ async function fetchAPI() {
                     mode: 'vertical',
                     scaleID: 'x',
                     value: nowhhmm, // Replace with the date where you want to add the vertical bar
-                    borderColor: 'black',
-                    borderWidth: 1,
+                    borderColor: 'blue',
+                    borderWidth: 3,
                     label: {
                       enabled: true,
                       position: 'top',
@@ -170,6 +170,9 @@ async function fetchAPI() {
                 x: {
                   // type: 'time',
                   grid: {
+                    display: false,
+                  },
+                  ticks: {
                     display: false,
                   }
                 },
