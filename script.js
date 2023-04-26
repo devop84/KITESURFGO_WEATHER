@@ -87,89 +87,87 @@ async function fetchAPI() {
     conditionWindArrow.textContent = windArrow;
     currentLastUpdated.textContent = lastUpdated;
     
+// GET TIDES DATA
 
-//     // Fetch data from api.marea.ooo
+      // Get start of the day in Unix (utc)
+      const now = new Date();
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const startofDayUnix = startOfDay.getTime() / 1000;
 
-//     const proxyUrl = "https://api.allorigins.win/get?url=";
-//     const apiUrl = `https://api.marea.ooo/v2/tides?token=46d1e2c4-61de-40d6-b662-e07154962079&latitude=44.414&longitude=-2.097`;
-//     const apiUrlWithProxy = `${proxyUrl}${encodeURIComponent(apiUrl)}`;
+      const token = '46d1e2c4-61de-40d6-b662-e07154962079';
+      // const lat = '-2.5643194097356137';
+      // const lon = '-42.744428410495985';
 
-//     fetch(apiUrlWithProxy)
-//       .then(response => response.json())
-//       .then(datamarea => {
-//         // Do something with the data here
-//         const dataMarea = JSON.parse(datamarea.contents);
-//         const extremes = dataMarea.extremes;
-//         console.log(extremes);
-
-
+      const proxyUrl = "https://api.allorigins.win/get?url=";
+      const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}`;
+      const apiUrlWithProxy = `${proxyUrl}${encodeURIComponent(apiUrl)}`;
 
 
+      fetch(apiUrlWithProxy)
+      .then(response => response.json())
 
-//       var data = {
-//         labels: ["2023-04-22T23:02:32+00:00", "2023-04-23T05:21:43+00:00", "2023-04-23T11:18:13+00:00", "2023-04-23T17:32:46+00:00"],
-//         datasets: [{
-//             label: "Height",
-//             data: [-1.7772909106, 1.5390116396, -1.5165860946, 1.5183191763],
-//             fill: false,
-//             borderColor: "rgb(75, 192, 192)",
-//             lineTension: 0.1
-//         }]
-//       };
-      
-// var options = {
-//     scales: {
-//         xAxes: [{
-//             type: 'time',
-//             time: {
-//                 displayFormats: {
-//                     hour: 'h:mm a'
-//                 },
-//                 display: false // add this line
-//             },
-//             scaleLabel: {
-//                 display: false,
-//                 labelString: 'Time'
-//             }
-//         }],
-//         yAxes: [{
-//             scaleLabel: {
-//                 display: true,
-//                 labelString: 'Height',
-//             }
-//         }]
-//     },
-//     plugins: {
-//         legend: {
-//             display:false,
-//         }
-//     }
-// };
+      .then(datamarea => {
+        const dataMarea = JSON.parse(datamarea.contents);
+        const tideData = dataMarea.heights;
+        console.log(tideData);
 
-      
-//       var ctx = document.getElementById("myChart").getContext("2d");
-//       var myChart = new Chart(ctx, {
-//           type: 'line',
-//           data: data,
-//           options: options
-//       });
-      
+        // Convert datetime into local time
+        const tideDataLocal = tideData.map((data) => {
+          const datetimeLocal = new Date(data.datetime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+          return {...data, datetimeLocal: datetimeLocal};
+        });
 
 
 
 
+        function createChart(data) {
+          // Extract datetime and height values from the data array
+          const datetimeValues = data.map(entry => entry.datetimeLocal);
+          const heightValues = data.map(entry => entry.height);
+
+          // Destroy existing Chart object if it exists
+          const existingChart = Chart.getChart('myChart');
+          if (existingChart) {
+            existingChart.destroy();
+          }
+          // Create a new Chart object and specify the chart type and data
+          const newchart = new Chart(document.getElementById('myChart'), {
+            type: 'line',
+            data: {
+              labels: datetimeValues,
+              datasets: [{
+                label: 'Height',
+                data: heightValues,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                lineTension: 0.4,
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  title: {
+                    display: true,
+                    text: 'Height'
+                  }
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Datetime'
+                  }
+                }
+              }
+            }
+          });
+        }
+        
+        createChart(tideDataLocal);
+      })
+      .catch(error => console.error(error));
 
 
-
-
-
-
-
-//       })
-//       .catch(error => console.error(error));
-
-
-      
 
     selectLocation.classList.remove('display-select-location');
   } catch (error) {
