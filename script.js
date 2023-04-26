@@ -145,16 +145,21 @@ async function fetchAPI() {
               }]
             },
             options: {
+              plugins: {
+                legend: {
+                  display:false,
+                },
+              },
               scales: {
                 y: {
                   title: {
-                    display: true,
+                    display: false,
                     text: 'Height'
                   }
                 },
                 x: {
                   title: {
-                    display: true,
+                    display: false,
                     text: 'Datetime'
                   }
                 }
