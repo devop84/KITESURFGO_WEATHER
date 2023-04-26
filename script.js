@@ -121,6 +121,7 @@ async function fetchAPI() {
 
 
         function createChart(data) {
+
           // Extract datetime and height values from the data array
           const datetimeValues = data.map(entry => entry.datetimeLocal);
           const heightValues = data.map(entry => entry.height);
@@ -149,18 +150,31 @@ async function fetchAPI() {
                 legend: {
                   display:false,
                 },
+                annotation: {
+                  annotations: [{
+                    type: 'line',
+                    mode: 'vertical',
+                    scaleID: 'x',
+                    value: '10:00', // Replace with the date where you want to add the vertical bar
+                    borderColor: 'black',
+                    borderWidth: 1,
+                    label: {
+                      enabled: true,
+                      position: 'top',
+                      content: 'Vertical Bar',
+                    }
+                  }]
+                }
               },
               scales: {
-                y: {
-                  title: {
+                x: {
+                  grid: {
                     display: false,
-                    text: 'Height'
                   }
                 },
-                x: {
-                  title: {
+                y: {
+                  ticks: {
                     display: false,
-                    text: 'Datetime'
                   }
                 }
               }
