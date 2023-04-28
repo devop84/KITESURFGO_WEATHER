@@ -1,144 +1,471 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Tide Height Chart</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
-
+    <meta charset="utf-8">
+    <title>D3.js Line Chart Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
+    <link rel="stylesheet" href="test.css">
   </head>
   <body>
-    <canvas id="tide-chart"></canvas>
+    <div id="chart-container"></div>
+
     <script>
-  function getTideHeight(tideData, datetimeStr) {
-    const datetime = new Date(datetimeStr);
-    for (let i = 0; i < tideData.length - 1; i++) {
-      const currentTide = tideData[i];
-      const nextTide = tideData[i + 1];
-      const currentTideTime = new Date(currentTide.datetime);
-      const nextTideTime = new Date(nextTide.datetime);
-      if (currentTideTime <= datetime && datetime < nextTideTime) {
-        // Interpolate tide height using a sinusoidal function between two neighboring tides
-        const timeDiff = nextTideTime - currentTideTime;
-        const heightDiff = nextTide.height - currentTide.height;
-        const timeSinceLastTide = datetime - currentTideTime;
-        const fractionOfTime = timeSinceLastTide / timeDiff;
-        const tideHeight = currentTide.height + heightDiff * (Math.sin(Math.PI * fractionOfTime - Math.PI / 2) + 1) / 2;
-        return tideHeight;
-      }
+
+
+
+
+
+const data = [
+    {
+      "timestamp": 1682709959,
+      "height": -0.4487175781,
+      "state": "FALLING",
+      "datetime": "2023-04-28T19:25:59+00:00"
+    },
+    {
+      "timestamp": 1682711759,
+      "height": -0.5699490242,
+      "state": "FALLING",
+      "datetime": "2023-04-28T19:55:59+00:00"
+    },
+    {
+      "timestamp": 1682713559,
+      "height": -0.6433389409,
+      "state": "FALLING",
+      "datetime": "2023-04-28T20:25:59+00:00"
+    },
+    {
+      "timestamp": 1682715359,
+      "height": -0.6507295065,
+      "state": "RISING",
+      "datetime": "2023-04-28T20:55:59+00:00"
+    },
+    {
+      "timestamp": 1682717159,
+      "height": -0.5957651116,
+      "state": "RISING",
+      "datetime": "2023-04-28T21:25:59+00:00"
+    },
+    {
+      "timestamp": 1682718959,
+      "height": -0.502089574,
+      "state": "RISING",
+      "datetime": "2023-04-28T21:55:59+00:00"
+    },
+    {
+      "timestamp": 1682720759,
+      "height": -0.4002469049,
+      "state": "RISING",
+      "datetime": "2023-04-28T22:25:59+00:00"
+    },
+    {
+      "timestamp": 1682722559,
+      "height": -0.3109865274,
+      "state": "RISING",
+      "datetime": "2023-04-28T22:55:59+00:00"
+    },
+    {
+      "timestamp": 1682724359,
+      "height": -0.2352298426,
+      "state": "RISING",
+      "datetime": "2023-04-28T23:25:59+00:00"
+    },
+    {
+      "timestamp": 1682726159,
+      "height": -0.156799629,
+      "state": "RISING",
+      "datetime": "2023-04-28T23:55:59+00:00"
+    },
+    {
+      "timestamp": 1682727959,
+      "height": -0.0558549655,
+      "state": "RISING",
+      "datetime": "2023-04-29T00:25:59+00:00"
+    },
+    {
+      "timestamp": 1682729759,
+      "height": 0.0756659772,
+      "state": "RISING",
+      "datetime": "2023-04-29T00:55:59+00:00"
+    },
+    {
+      "timestamp": 1682731559,
+      "height": 0.2260870516,
+      "state": "RISING",
+      "datetime": "2023-04-29T01:25:59+00:00"
+    },
+    {
+      "timestamp": 1682733359,
+      "height": 0.3678384169,
+      "state": "RISING",
+      "datetime": "2023-04-29T01:55:59+00:00"
+    },
+    {
+      "timestamp": 1682735159,
+      "height": 0.4701372702,
+      "state": "RISING",
+      "datetime": "2023-04-29T02:25:59+00:00"
+    },
+    {
+      "timestamp": 1682736959,
+      "height": 0.5128954431,
+      "state": "RISING",
+      "datetime": "2023-04-29T02:55:59+00:00"
+    },
+    {
+      "timestamp": 1682738759,
+      "height": 0.4945811375,
+      "state": "FALLING",
+      "datetime": "2023-04-29T03:25:59+00:00"
+    },
+    {
+      "timestamp": 1682740559,
+      "height": 0.4309123893,
+      "state": "FALLING",
+      "datetime": "2023-04-29T03:55:59+00:00"
+    },
+    {
+      "timestamp": 1682742359,
+      "height": 0.3461191791,
+      "state": "FALLING",
+      "datetime": "2023-04-29T04:25:59+00:00"
+    },
+    {
+      "timestamp": 1682744159,
+      "height": 0.2615213963,
+      "state": "FALLING",
+      "datetime": "2023-04-29T04:55:59+00:00"
+    },
+    {
+      "timestamp": 1682745959,
+      "height": 0.1866261288,
+      "state": "FALLING",
+      "datetime": "2023-04-29T05:25:59+00:00"
+    },
+    {
+      "timestamp": 1682747759,
+      "height": 0.1165002462,
+      "state": "FALLING",
+      "datetime": "2023-04-29T05:55:59+00:00"
+    },
+    {
+      "timestamp": 1682749559,
+      "height": 0.0366294542,
+      "state": "FALLING",
+      "datetime": "2023-04-29T06:25:59+00:00"
+    },
+    {
+      "timestamp": 1682751359,
+      "height": -0.0666559011,
+      "state": "FALLING",
+      "datetime": "2023-04-29T06:55:59+00:00"
+    },
+    {
+      "timestamp": 1682753159,
+      "height": -0.1950568252,
+      "state": "FALLING",
+      "datetime": "2023-04-29T07:25:59+00:00"
+    },
+    {
+      "timestamp": 1682754959,
+      "height": -0.3326225226,
+      "state": "FALLING",
+      "datetime": "2023-04-29T07:55:59+00:00"
+    },
+    {
+      "timestamp": 1682756759,
+      "height": -0.4497213255,
+      "state": "FALLING",
+      "datetime": "2023-04-29T08:25:59+00:00"
+    },
+    {
+      "timestamp": 1682758559,
+      "height": -0.5158206366,
+      "state": "FALLING",
+      "datetime": "2023-04-29T08:55:59+00:00"
+    },
+    {
+      "timestamp": 1682760359,
+      "height": -0.5145827088,
+      "state": "RISING",
+      "datetime": "2023-04-29T09:25:59+00:00"
+    },
+    {
+      "timestamp": 1682762159,
+      "height": -0.4523895769,
+      "state": "RISING",
+      "datetime": "2023-04-29T09:55:59+00:00"
+    },
+    {
+      "timestamp": 1682763959,
+      "height": -0.3546079401,
+      "state": "RISING",
+      "datetime": "2023-04-29T10:25:59+00:00"
+    },
+    {
+      "timestamp": 1682765759,
+      "height": -0.251279279,
+      "state": "RISING",
+      "datetime": "2023-04-29T10:55:59+00:00"
+    },
+    {
+      "timestamp": 1682767559,
+      "height": -0.1607653468,
+      "state": "RISING",
+      "datetime": "2023-04-29T11:25:59+00:00"
+    },
+    {
+      "timestamp": 1682769359,
+      "height": -0.0814008525,
+      "state": "RISING",
+      "datetime": "2023-04-29T11:55:59+00:00"
+    },
+    {
+      "timestamp": 1682771159,
+      "height": 0.0038674785,
+      "state": "RISING",
+      "datetime": "2023-04-29T12:25:59+00:00"
+    },
+    {
+      "timestamp": 1682772959,
+      "height": 0.1131796729,
+      "state": "RISING",
+      "datetime": "2023-04-29T12:55:59+00:00"
+    },
+    {
+      "timestamp": 1682774759,
+      "height": 0.2510443986,
+      "state": "RISING",
+      "datetime": "2023-04-29T13:25:59+00:00"
+    },
+    {
+      "timestamp": 1682776559,
+      "height": 0.4021936531,
+      "state": "RISING",
+      "datetime": "2023-04-29T13:55:59+00:00"
+    },
+    {
+      "timestamp": 1682778359,
+      "height": 0.5371830969,
+      "state": "RISING",
+      "datetime": "2023-04-29T14:25:59+00:00"
+    },
+    {
+      "timestamp": 1682780159,
+      "height": 0.625773026,
+      "state": "RISING",
+      "datetime": "2023-04-29T14:55:59+00:00"
+    },
+    {
+      "timestamp": 1682781959,
+      "height": 0.6502204432,
+      "state": "FALLING",
+      "datetime": "2023-04-29T15:25:59+00:00"
+    },
+    {
+      "timestamp": 1682783759,
+      "height": 0.6117144849,
+      "state": "FALLING",
+      "datetime": "2023-04-29T15:55:59+00:00"
+    },
+    {
+      "timestamp": 1682785559,
+      "height": 0.5276648155,
+      "state": "FALLING",
+      "datetime": "2023-04-29T16:25:59+00:00"
+    },
+    {
+      "timestamp": 1682787359,
+      "height": 0.4222333803,
+      "state": "FALLING",
+      "datetime": "2023-04-29T16:55:59+00:00"
+    },
+    {
+      "timestamp": 1682789159,
+      "height": 0.3150863069,
+      "state": "FALLING",
+      "datetime": "2023-04-29T17:25:59+00:00"
+    },
+    {
+      "timestamp": 1682790959,
+      "height": 0.2134203236,
+      "state": "FALLING",
+      "datetime": "2023-04-29T17:55:59+00:00"
+    },
+    {
+      "timestamp": 1682792759,
+      "height": 0.1106408297,
+      "state": "FALLING",
+      "datetime": "2023-04-29T18:25:59+00:00"
+    },
+    {
+      "timestamp": 1682794559,
+      "height": -0.0076021277,
+      "state": "FALLING",
+      "datetime": "2023-04-29T18:55:59+00:00"
     }
-    // If the datetime is after the last tide, return the height of the last tide
-    return tideData[tideData.length - 1].height;
-  }
-
-  const tideData = [
-    {
-      "timestamp": 1682204552,
-      "height": -1.7772909106,
-      "state": "LOW TIDE",
-      "datetime": "2023-04-22T23:02:32+00:00"
-    },
-    {
-      "timestamp": 1682227303,
-      "height": 1.5390116396,
-      "state": "HIGH TIDE",
-      "datetime": "2023-04-23T05:21:43+00:00"
-    },
-    {
-      "timestamp": 1682248693,
-      "height": -1.5165860946,
-      "state": "LOW TIDE",
-      "datetime": "2023-04-23T11:18:13+00:00"
-    },
-    {
-      "timestamp": 1682271166,
-      "height": 1.5183191763,
-      "state": "HIGH TIDE",
-      "datetime": "2023-04-23T17:32:46+00:00"
-    },
-    {
-      "timestamp": 1682204552,
-      "height": -1.7772909106,
-      "state": "LOW TIDE",
-      "datetime": "2023-04-24T01:02:32+00:00"
-    }
-  ];
-
-  const localTime = 1682248693;
-
-  const labels = [];
-  const data = [];
-
-  // Generate tide height data for each hour of the day
-////////////////////////////////////////////////////////
+  ]
 
 
-/////////// A FAIRE : REECRIR LA BOUCLE SI DESSOUS AFIN DE COMMENCER PAR LA PREMIERE TIDEDATA
-///////////           ET TERMINER PAR LA DERNIERE, ATTENTION IL FAUT LE FAIRE AVEC LES TIMESTAMP 
-///////////           ET IGNORER LES DATA DATETIME
 
-  ///////////////////////////////////////////////////////
-  for (let i = 0; i < 24 * 60; i++) {
-    const datetime = new Date(`2023-04-23T${Math.floor(i / 60).toString().padStart(2, "0")}:${(i % 60).toString().padStart(2, "0")}:00+00:00`);
-    const tideHeight = getTideHeight(tideData, datetime.toISOString());
-    labels.push(`${Math.floor(i / 60).toString().padStart(2, "0")}:${(i % 60).toString().padStart(2, "0")}`);
-    data.push(tideHeight);
-  }
-  
-  const ctx = document.getElementById('tide-chart').getContext('2d');
-  const chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Tide Height',
-        data: data,
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        x: {
-          ticks: {
-            display: true
-          },
-          grid: {
-            display: false
-          }
-        },
-        y: {
-          ticks: {
-            display: true
-          }
-        }
-      },
-      plugins: {
-        title: {
-          display: false
-        },
-        legend: {
-          display: false
-        },
-        annotation: {
-          annotations: [{
-            type: 'line',
-            mode: 'vertical',
-            scaleID: 'x',
-            value: '08:00',
-            borderColor: 'red',
-            borderWidth: 1,
-            label: {
-              content: `test`,
-              enabled: true,
-              position: 'top'
-            }
-          }]
-      }
-      }
-    }
+
+
+
+
+
+
+
+      // // Get start of the day in Unix (utc)
+      // const now = new Date();
+      // const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      // const startofDayUnix = startOfDay.getTime() / 1000;
+
+      // const token = '910c014a-e33d-4bdf-b1cf-6738e8e281b2';
+      // const lat = '-2.5643194097356137';
+      // const lon = '-42.744428410495985';
+
+      // const proxyUrl = "https://api.allorigins.win/get?url=";
+      // const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=30`;
+      // const apiUrlWithProxy = `${proxyUrl}${encodeURIComponent(apiUrl)}`;
+
+      // fetch(apiUrlWithProxy)
+      // .then(response => response.json())
+      // .then(datamarea => {
+      //   const dataMarea = JSON.parse(datamarea.contents);
+      //   const data = dataMarea.heights;
+      //   console.log(data)
+
+function getDivWidth(id) {
+  return document.getElementById(id).offsetWidth;
+}
+function getDivHeight(id) {
+  return document.getElementById(id).offsetHeight;
+}
+
+var w = getDivWidth('chart-container');
+var h = getDivHeight('chart-container');
+
+const margin = { top: 20, right: 60, bottom: 40, left: 60 };
+
+const xScale = d3.scaleTime()
+  .domain(d3.extent(data, d => new Date(d.datetime)))
+  .range([margin.left, w - margin.right]);
+
+const yScale = d3.scaleLinear()
+  .domain(d3.extent(data, d => d.height))
+  .range([h - margin.bottom, margin.top]);
+
+const lineFunc = d3.line()
+  .x(d => xScale(new Date(d.datetime)))
+  .y(d => yScale(d.height))
+  .curve(d3.curveCatmullRom.alpha(0.5));
+
+const svg = d3.select("#chart-container").append("svg")
+  .attr("id", "chart")
+  .attr("width", w)
+  .attr("height", h)
+  .on("mousemove", function(event) {
+  const mouseX = event.offsetX || event.layerX; // get the x-coordinate of the mouse pointer
+  const newX = Math.max(margin.left, Math.min(w - margin.right, mouseX)); // constrain the bar within the chart area
+  bar.attr("x", newX - 1.5); // update the position of the bar
+  const newData = data.filter(d => new Date(d.datetime) <= xScale.invert(newX))[data.filter(d => new Date(d.datetime) <= xScale.invert(newX)).length-1];
+  svg.select("#label").attr("x", newX).text(`${newData.height.toFixed(2)} @ ${formatDate(xScale.invert(newX))}`);
+  })
+  svg.on("touchmove", function(event) {
+  const touchX = event.touches[0].clientX - this.getBoundingClientRect().x;
+  const newX = Math.max(margin.left, Math.min(w - margin.right, touchX)); // constrain the bar within the chart area
+  bar.attr("x", newX - 1.5); // update the position of the bar
+  const newData = data.filter(d => new Date(d.datetime) <= xScale.invert(newX))[data.filter(d => new Date(d.datetime) <= xScale.invert(newX)).length-1];
+  svg.select("#label").attr("x", newX).text(`${newData.height.toFixed(2)} @ ${formatDate(xScale.invert(newX))}`);
   });
+
+svg.append("path")
+  .datum(data)
+  .attr("d", lineFunc)
+  .attr("fill", "none")
+  .attr("stroke", "steelblue")
+  .attr("stroke-width", 2);
+
+
+// Get current time of day
+const currentTime = new Date();
+
+
+// Get index and values of data points before and after current time
+const index = data.findIndex(d => new Date(d.datetime) > currentTime);
+const before = data[index - 1];
+const after = data[index];
+
+// Calculate percentage between two points for each value
+const percentage = (currentTime - new Date(before.datetime)) / (new Date(after.datetime) - new Date(before.datetime));
+const interpolatedData = {
+  datetime: currentTime,
+  height: before.height + (after.height - before.height) * percentage,
+  // add other properties here if applicable
+};
+
+// Add interpolated data point to data array
+data.splice(index, 0, interpolatedData);
+
+// Create a variable to store the dragged bar
+let draggedBar = null;
+
+
+// Add vertical bar to chart
+const bar = svg.append("rect")
+  .datum(data.filter(d => new Date(d.datetime).getTime() == currentTime.getTime())[0])
+  .attr("x", d => xScale(new Date(d.datetime)) - 2.5)
+  .attr("y", margin.top)
+  .attr("width", 3)
+  .attr("height", h - margin.top - margin.bottom)
+  .style("fill", "red");
+
+// Add label to bar
+const formatDate = d3.timeFormat("%H:%M");
+svg.append("text")
+  .attr("id", "label")
+  .attr("x", d => xScale(new Date(bar.datum().datetime)))
+  .attr("y", h - margin.bottom + 15)
+  .style("text-anchor", "middle")
+  .style("fill", "red")
+  .text(`${bar.datum().height.toFixed(2)} @ ${formatDate(bar.datum().datetime)}`);
+
+
+// Add x-axis grid
+const xAxisGrid = d3.axisBottom(xScale)
+.tickSize(-(h - margin.top - margin.bottom))
+.tickFormat('')
+.ticks(d3.timeHour.every(1));
+svg.append('g')
+.attr('class', 'x-axis-grid')
+.attr('transform', `translate(0,${h - margin.bottom})`)
+.call(xAxisGrid);
+
+// Add y-axis grid
+const yAxisGrid = d3.axisLeft(yScale)
+.tickSize(-(w - margin.left - margin.right))
+.tickFormat('')
+.ticks(1);
+svg.append('g')
+.attr('class', 'y-axis-grid')
+.attr('transform', `translate(${margin.left},0)`)
+.call(yAxisGrid);
+
+// Add y=0 line to y-axis grid
+svg.select('.y-axis-grid')
+.select('line')
+.style('stroke', 'lightgray')
+.style('stroke-width', '1px');
+
+// Add horizontal lines for each round hour to x-axis grid
+svg.selectAll('.x-axis-grid line')
+.filter(d => d.getMinutes() === 0 && d.getSeconds() === 0)
+.style('stroke', 'lightgray')
+.style('stroke-width', '1px');
+
+
+
+// });
     </script>
   </body>
 </html>
-
-

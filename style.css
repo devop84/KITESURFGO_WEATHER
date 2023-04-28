@@ -128,15 +128,25 @@ body {
     font-weight: 600;
     font-size: 32px;
 }
-.tides {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 0px 16px;
-    gap: 16px;
-}
 
+svg,
+#chart-container {
+  pointer-events: all;
+  width:100%;
+  height:200px;
+  border: none;
+}
+#label {
+  font-weight: bold;
+  font-size: 16px;
+}
+.x-axis-grid line,
+.y-axis-grid line {
+  stroke: none;
+}
+path.domain {
+    stroke: none;
+}
 .levels {
     display: flex;
     flex-direction: column;
