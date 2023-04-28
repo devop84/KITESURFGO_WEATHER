@@ -426,7 +426,7 @@ return document.getElementById(id).offsetHeight;
 var w = getDivWidth('chart-container');
 var h = getDivHeight('chart-container');
 
-const margin = { top: 20, right: 60, bottom: 40, left: 60 };
+const margin = { top: 32, right: 16, bottom: 16, left: 16 };
 
 const xScale = d3.scaleTime()
 .domain(d3.extent(tideData, d => new Date(d.datetime)))
@@ -450,14 +450,14 @@ const mouseX = event.offsetX || event.layerX; // get the x-coordinate of the mou
 const newX = Math.max(margin.left, Math.min(w - margin.right, mouseX)); // constrain the bar within the chart area
 bar.attr("x", newX - 1.5); // update the position of the bar
 const newData = tideData.filter(d => new Date(d.datetime) <= xScale.invert(newX))[tideData.filter(d => new Date(d.datetime) <= xScale.invert(newX)).length-1];
-svg.select("#label").attr("x", newX).text(`${newData.height.toFixed(2)} @ ${formatDate(xScale.invert(newX))}`);
+svg.select("#label").text(`${newData.height.toFixed(2)}m at ${formatDate(xScale.invert(newX))}`);
 })
 svg.on("touchmove", function(event) {
 const touchX = event.touches[0].clientX - this.getBoundingClientRect().x;
 const newX = Math.max(margin.left, Math.min(w - margin.right, touchX)); // constrain the bar within the chart area
 bar.attr("x", newX - 1.5); // update the position of the bar
 const newData = tideData.filter(d => new Date(d.datetime) <= xScale.invert(newX))[tideData.filter(d => new Date(d.datetime) <= xScale.invert(newX)).length-1];
-svg.select("#label").attr("x", newX).text(`${newData.height.toFixed(2)} @ ${formatDate(xScale.invert(newX))}`);
+svg.select("#label").text(`${newData.height.toFixed(2)}m at ${formatDate(xScale.invert(newX))}`);
 });
 
 svg.append("path")
@@ -504,12 +504,12 @@ const bar = svg.append("rect")
 // Add label to bar
 const formatDate = d3.timeFormat("%H:%M");
 svg.append("text")
-.attr("id", "label")
-.attr("x", d => xScale(new Date(bar.datum().datetime)))
-.attr("y", h - margin.bottom + 15)
-.style("text-anchor", "middle")
-.style("fill", "red")
-.text(`${bar.datum().height.toFixed(2)} @ ${formatDate(bar.datum().datetime)}`);
+  .attr("id", "label")
+  .attr("x", w / 2)
+  .attr("y", margin.top - 5)
+  .style("text-anchor", "middle")
+  .style("fill", "white")
+  .text(`${bar.datum().height.toFixed(2)}m at ${formatDate(bar.datum().datetime)}`);
 
 
 // Add x-axis grid
