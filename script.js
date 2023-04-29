@@ -210,7 +210,7 @@ const formatDate = d3.timeFormat("%H:%M");
 svg.append("text")
   .attr("id", "label")
   .attr("x", w / 2)
-  .attr("y", margin.top - 5)
+  .attr("y", margin.top - 10)
   .style("text-anchor", "middle")
   .style("fill", "white")
   .text(`${bar.datum().height.toFixed(2)}m at ${formatDate(bar.datum().datetime)}`);
@@ -236,9 +236,10 @@ svg.selectAll('.x-axis-grid line')
 
 // Add y-axis grid
 const yAxisGrid = d3.axisLeft(yScale)
+.ticks(yScale.ticks().length * 2) // double the number of ticks
 .tickSize(-(w - margin.left - margin.right))
-.tickFormat(d => d.toFixed())
-.ticks(1);
+.tickFormat(d => d.toFixed(1)) // format number to one decimal place
+.ticks(2);
 svg.append('g')
 .attr('class', 'y-axis-grid')
 .attr('transform', `translate(${margin.left},0)`)
@@ -247,11 +248,8 @@ svg.append('g')
 
 // Add y=0 line to y-axis grid
 svg.selectAll('.y-axis-grid line')
-// .select('line')
 .style('stroke', 'rgba(0, 0, 0, 0.3)')
 .style('stroke-width', '1px');
-
-
 
 
 });
