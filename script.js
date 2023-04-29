@@ -100,7 +100,7 @@ async function fetchAPI() {
     // const lon = '-42.744428410495985';
 
     const proxyUrl = "https://corsproxy.io/?";
-    const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=30`;
+    const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=30&datum=LAT`;
 
     fetch (proxyUrl + apiUrl)
     .then(response => response.json())
@@ -219,17 +219,25 @@ svg.append("text")
 // Add x-axis grid
 const xAxisGrid = d3.axisBottom(xScale)
 .tickSize(-(h - margin.top - margin.bottom))
-.tickFormat('')
-.ticks(d3.timeHour.every(1));
+.tickFormat(d3.timeFormat('%H:%M'))
+.ticks(d3.timeHour.every(3));
 svg.append('g')
 .attr('class', 'x-axis-grid')
 .attr('transform', `translate(0,${h - margin.bottom})`)
 .call(xAxisGrid)
 
+
+// Add vertical lines for each round hour to x-axis grid
+svg.selectAll('.x-axis-grid line')
+.filter(d => d.getMinutes() === 0 && d.getSeconds() === 0)
+.style('stroke', 'rgba(0, 0, 0, 0.3)')
+.style('stroke-width', '1px');
+
+
 // Add y-axis grid
 const yAxisGrid = d3.axisLeft(yScale)
 .tickSize(-(w - margin.left - margin.right))
-.tickFormat('')
+.tickFormat(d => d.toFixed())
 .ticks(1);
 svg.append('g')
 .attr('class', 'y-axis-grid')
@@ -238,16 +246,12 @@ svg.append('g')
 
 
 // Add y=0 line to y-axis grid
-svg.select('.y-axis-grid')
-.select('line')
+svg.selectAll('.y-axis-grid line')
+// .select('line')
 .style('stroke', 'rgba(0, 0, 0, 0.3)')
 .style('stroke-width', '1px');
 
-// Add horizontal lines for each round hour to x-axis grid
-svg.selectAll('.x-axis-grid line')
-.filter(d => d.getMinutes() === 0 && d.getSeconds() === 0)
-.style('stroke', 'rgba(0, 0, 0, 0.3)')
-.style('stroke-width', '1px');
+
 
 
 });
