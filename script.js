@@ -90,331 +90,25 @@ async function fetchAPI() {
 //__________________________________________________________________________________________
 
 
+    // Get start of the day in Unix (utc)
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startofDayUnix = startOfDay.getTime() / 1000;
 
-
-
-
-
-
-const tideData = [
-  {
-    "timestamp": 1682709959,
-    "height": -0.4487175781,
-    "state": "FALLING",
-    "datetime": "2023-04-28T19:25:59+00:00"
-  },
-  {
-    "timestamp": 1682711759,
-    "height": -0.5699490242,
-    "state": "FALLING",
-    "datetime": "2023-04-28T19:55:59+00:00"
-  },
-  {
-    "timestamp": 1682713559,
-    "height": -0.6433389409,
-    "state": "FALLING",
-    "datetime": "2023-04-28T20:25:59+00:00"
-  },
-  {
-    "timestamp": 1682715359,
-    "height": -0.6507295065,
-    "state": "RISING",
-    "datetime": "2023-04-28T20:55:59+00:00"
-  },
-  {
-    "timestamp": 1682717159,
-    "height": -0.5957651116,
-    "state": "RISING",
-    "datetime": "2023-04-28T21:25:59+00:00"
-  },
-  {
-    "timestamp": 1682718959,
-    "height": -0.502089574,
-    "state": "RISING",
-    "datetime": "2023-04-28T21:55:59+00:00"
-  },
-  {
-    "timestamp": 1682720759,
-    "height": -0.4002469049,
-    "state": "RISING",
-    "datetime": "2023-04-28T22:25:59+00:00"
-  },
-  {
-    "timestamp": 1682722559,
-    "height": -0.3109865274,
-    "state": "RISING",
-    "datetime": "2023-04-28T22:55:59+00:00"
-  },
-  {
-    "timestamp": 1682724359,
-    "height": -0.2352298426,
-    "state": "RISING",
-    "datetime": "2023-04-28T23:25:59+00:00"
-  },
-  {
-    "timestamp": 1682726159,
-    "height": -0.156799629,
-    "state": "RISING",
-    "datetime": "2023-04-28T23:55:59+00:00"
-  },
-  {
-    "timestamp": 1682727959,
-    "height": -0.0558549655,
-    "state": "RISING",
-    "datetime": "2023-04-29T00:25:59+00:00"
-  },
-  {
-    "timestamp": 1682729759,
-    "height": 0.0756659772,
-    "state": "RISING",
-    "datetime": "2023-04-29T00:55:59+00:00"
-  },
-  {
-    "timestamp": 1682731559,
-    "height": 0.2260870516,
-    "state": "RISING",
-    "datetime": "2023-04-29T01:25:59+00:00"
-  },
-  {
-    "timestamp": 1682733359,
-    "height": 0.3678384169,
-    "state": "RISING",
-    "datetime": "2023-04-29T01:55:59+00:00"
-  },
-  {
-    "timestamp": 1682735159,
-    "height": 0.4701372702,
-    "state": "RISING",
-    "datetime": "2023-04-29T02:25:59+00:00"
-  },
-  {
-    "timestamp": 1682736959,
-    "height": 0.5128954431,
-    "state": "RISING",
-    "datetime": "2023-04-29T02:55:59+00:00"
-  },
-  {
-    "timestamp": 1682738759,
-    "height": 0.4945811375,
-    "state": "FALLING",
-    "datetime": "2023-04-29T03:25:59+00:00"
-  },
-  {
-    "timestamp": 1682740559,
-    "height": 0.4309123893,
-    "state": "FALLING",
-    "datetime": "2023-04-29T03:55:59+00:00"
-  },
-  {
-    "timestamp": 1682742359,
-    "height": 0.3461191791,
-    "state": "FALLING",
-    "datetime": "2023-04-29T04:25:59+00:00"
-  },
-  {
-    "timestamp": 1682744159,
-    "height": 0.2615213963,
-    "state": "FALLING",
-    "datetime": "2023-04-29T04:55:59+00:00"
-  },
-  {
-    "timestamp": 1682745959,
-    "height": 0.1866261288,
-    "state": "FALLING",
-    "datetime": "2023-04-29T05:25:59+00:00"
-  },
-  {
-    "timestamp": 1682747759,
-    "height": 0.1165002462,
-    "state": "FALLING",
-    "datetime": "2023-04-29T05:55:59+00:00"
-  },
-  {
-    "timestamp": 1682749559,
-    "height": 0.0366294542,
-    "state": "FALLING",
-    "datetime": "2023-04-29T06:25:59+00:00"
-  },
-  {
-    "timestamp": 1682751359,
-    "height": -0.0666559011,
-    "state": "FALLING",
-    "datetime": "2023-04-29T06:55:59+00:00"
-  },
-  {
-    "timestamp": 1682753159,
-    "height": -0.1950568252,
-    "state": "FALLING",
-    "datetime": "2023-04-29T07:25:59+00:00"
-  },
-  {
-    "timestamp": 1682754959,
-    "height": -0.3326225226,
-    "state": "FALLING",
-    "datetime": "2023-04-29T07:55:59+00:00"
-  },
-  {
-    "timestamp": 1682756759,
-    "height": -0.4497213255,
-    "state": "FALLING",
-    "datetime": "2023-04-29T08:25:59+00:00"
-  },
-  {
-    "timestamp": 1682758559,
-    "height": -0.5158206366,
-    "state": "FALLING",
-    "datetime": "2023-04-29T08:55:59+00:00"
-  },
-  {
-    "timestamp": 1682760359,
-    "height": -0.5145827088,
-    "state": "RISING",
-    "datetime": "2023-04-29T09:25:59+00:00"
-  },
-  {
-    "timestamp": 1682762159,
-    "height": -0.4523895769,
-    "state": "RISING",
-    "datetime": "2023-04-29T09:55:59+00:00"
-  },
-  {
-    "timestamp": 1682763959,
-    "height": -0.3546079401,
-    "state": "RISING",
-    "datetime": "2023-04-29T10:25:59+00:00"
-  },
-  {
-    "timestamp": 1682765759,
-    "height": -0.251279279,
-    "state": "RISING",
-    "datetime": "2023-04-29T10:55:59+00:00"
-  },
-  {
-    "timestamp": 1682767559,
-    "height": -0.1607653468,
-    "state": "RISING",
-    "datetime": "2023-04-29T11:25:59+00:00"
-  },
-  {
-    "timestamp": 1682769359,
-    "height": -0.0814008525,
-    "state": "RISING",
-    "datetime": "2023-04-29T11:55:59+00:00"
-  },
-  {
-    "timestamp": 1682771159,
-    "height": 0.0038674785,
-    "state": "RISING",
-    "datetime": "2023-04-29T12:25:59+00:00"
-  },
-  {
-    "timestamp": 1682772959,
-    "height": 0.1131796729,
-    "state": "RISING",
-    "datetime": "2023-04-29T12:55:59+00:00"
-  },
-  {
-    "timestamp": 1682774759,
-    "height": 0.2510443986,
-    "state": "RISING",
-    "datetime": "2023-04-29T13:25:59+00:00"
-  },
-  {
-    "timestamp": 1682776559,
-    "height": 0.4021936531,
-    "state": "RISING",
-    "datetime": "2023-04-29T13:55:59+00:00"
-  },
-  {
-    "timestamp": 1682778359,
-    "height": 0.5371830969,
-    "state": "RISING",
-    "datetime": "2023-04-29T14:25:59+00:00"
-  },
-  {
-    "timestamp": 1682780159,
-    "height": 0.625773026,
-    "state": "RISING",
-    "datetime": "2023-04-29T14:55:59+00:00"
-  },
-  {
-    "timestamp": 1682781959,
-    "height": 0.6502204432,
-    "state": "FALLING",
-    "datetime": "2023-04-29T15:25:59+00:00"
-  },
-  {
-    "timestamp": 1682783759,
-    "height": 0.6117144849,
-    "state": "FALLING",
-    "datetime": "2023-04-29T15:55:59+00:00"
-  },
-  {
-    "timestamp": 1682785559,
-    "height": 0.5276648155,
-    "state": "FALLING",
-    "datetime": "2023-04-29T16:25:59+00:00"
-  },
-  {
-    "timestamp": 1682787359,
-    "height": 0.4222333803,
-    "state": "FALLING",
-    "datetime": "2023-04-29T16:55:59+00:00"
-  },
-  {
-    "timestamp": 1682789159,
-    "height": 0.3150863069,
-    "state": "FALLING",
-    "datetime": "2023-04-29T17:25:59+00:00"
-  },
-  {
-    "timestamp": 1682790959,
-    "height": 0.2134203236,
-    "state": "FALLING",
-    "datetime": "2023-04-29T17:55:59+00:00"
-  },
-  {
-    "timestamp": 1682792759,
-    "height": 0.1106408297,
-    "state": "FALLING",
-    "datetime": "2023-04-29T18:25:59+00:00"
-  },
-  {
-    "timestamp": 1682794559,
-    "height": -0.0076021277,
-    "state": "FALLING",
-    "datetime": "2023-04-29T18:55:59+00:00"
-  }
-]
-
-
-
-
-
-
-
-
-
-
-    // // Get start of the day in Unix (utc)
-    // const now = new Date();
-    // const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    // const startofDayUnix = startOfDay.getTime() / 1000;
-
-    // const token = '910c014a-e33d-4bdf-b1cf-6738e8e281b2';
+    const token = '910c014a-e33d-4bdf-b1cf-6738e8e281b2';
     // const lat = '-2.5643194097356137';
     // const lon = '-42.744428410495985';
 
-    // const proxyUrl = "https://api.allorigins.win/get?url=";
-    // const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=30`;
-    // const apiUrlWithProxy = `${proxyUrl}${encodeURIComponent(apiUrl)}`;
+    const proxyUrl = "https://corsproxy.io/?";
+    const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=30`;
 
-    // fetch(apiUrlWithProxy)
-    // .then(response => response.json())
-    // .then(datamarea => {
-    //   const dataMarea = JSON.parse(datamarea.contents);
-    //   const data = dataMarea.heights;
-    //   console.log(data)
+    fetch (proxyUrl + apiUrl)
+    .then(response => response.json())
+    .then(datamarea => {
+      console.log(datamarea)
+      const tideExtremes = datamarea.extremes;
+      const tideData = datamarea.heights;
+      console.log(tideExtremes)
 
 function getDivWidth(id) {
 return document.getElementById(id).offsetWidth;
@@ -440,6 +134,16 @@ const lineFunc = d3.line()
 .x(d => xScale(new Date(d.datetime)))
 .y(d => yScale(d.height))
 .curve(d3.curveCatmullRom.alpha(0.5));
+
+// Select the SVG element by its ID
+const svgold = d3.select("#chart-container svg");
+
+// Check if the SVG element exists
+if (!svgold.empty()) {
+  // If the SVG element exists, remove it
+  svgold.remove();
+}
+
 
 const svg = d3.select("#chart-container").append("svg")
 .attr("id", "chart")
@@ -546,7 +250,7 @@ svg.selectAll('.x-axis-grid line')
 .style('stroke-width', '1px');
 
 
-
+});
 
 
 
