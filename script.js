@@ -100,7 +100,7 @@ async function fetchAPI() {
     // const lon = '-42.744428410495985';
 
     const proxyUrl = "https://corsproxy.io/?";
-    const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=30&datum=LAT`;
+    const apiUrl = `https://api.marea.ooo/v2/tides?token=${token}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=1&datum=LAT`;
 
     fetch (proxyUrl + apiUrl)
     .then(response => response.json())
