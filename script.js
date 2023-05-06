@@ -3,11 +3,6 @@ const mareatoken = '910c014a-e33d-4bdf-b1cf-6738e8e281b2';
 // Get current time of day
 const currentTime = new Date();
 
-//chart dimension
-const w = document.getElementById('chart-container').offsetWidth;
-const h = document.getElementById('chart-container').offsetHeight;
-const margin = { top: 32, right: 16, bottom: 16, left: 16 };
-
 // Get references to HTML elements
 const toggleSelectLocation = document.getElementById('toggle-select-location');
 const selectLocation = document.querySelector('.select-location');
@@ -102,6 +97,11 @@ async function fetchAPI() {
       console.log(datamarea)
       const tideData = datamarea.heights;
 
+      //chart dimension
+      const w = document.getElementById('chart-container').offsetWidth;
+      const h = document.getElementById('chart-container').offsetHeight;
+      const margin = { top: 32, right: 16, bottom: 16, left: 16 };
+
       const xScale = d3.scaleTime()
         .domain(d3.extent(tideData, d => new Date(d.datetime)))
         .range([margin.left, w - margin.right]);
@@ -160,7 +160,6 @@ async function fetchAPI() {
       const interpolatedData = {
         datetime: currentTime,
         height: before.height + (after.height - before.height) * percentage,
-        // add other properties here if applicable
       };
     
       // Add interpolated data point to data array
