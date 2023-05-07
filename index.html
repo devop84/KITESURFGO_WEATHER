@@ -21,7 +21,10 @@
     <div class="weather">
         
         <div class="location">
-            <img id="condition_icon" src="img/113.webp" alt="">
+            <div class="conditions">
+                 <img id="condition_icon" src="img/113.webp" alt="">
+                 <h3 id="location_temp"></h3>
+            </div>
             <h2 id="location_name"></h2>
             <i class="material-symbols-outlined" id="toggle-select-location">explore</i>
         </div>
@@ -34,11 +37,11 @@
         </div>
         <div class="wind">
             <div class="wind-direction">
-                <i class="material-symbols-outlined" id="wind_arrow">south_west</i>
+                <i class="material-symbols-outlined" id="wind_arrow"></i>
                 <h3 id="wind_dir"></h3>
             </div>
             <div class="wind-speed">
-                <i class="material-symbols-outlined">arrow_drop_up</i>
+                <i class="material-symbols-outlined" id="wind_prev"></i>
                 <h3 id="wind_kn"></h3>
             </div>
         </div>

@@ -60,7 +60,17 @@ body {
     width:100%;
     max-width: 450px;
 }
-
+.conditions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.conditions h3 {
+    color:white;
+    font-size: 16px;
+    margin-top:-15px;
+}
 .location {
     display: flex;
     flex-direction: row;
@@ -118,7 +128,7 @@ body {
     padding: 0px;
     color: #FFF;
 }
-.wind-speed i {
+#wind_prev {
     font-size: 32px;
     color: greenyellow;
 }

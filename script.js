@@ -12,18 +12,15 @@ const refreshLocation = document.getElementById('refresh_location');
 const inputLocation = document.getElementById('input_location');
 const conditionWindArrow = document.getElementById("wind_arrow");
 const locationName = document.getElementById("location_name");
+const locationTemp = document.getElementById("location_temp");
 const conditionIcon = document.getElementById("condition_icon");
 const conditionWindDir = document.getElementById("wind_dir");
+const conditionWindPrev = document.getElementById("wind_prev");
 const conditionWindKn = document.getElementById("wind_kn");
 const currentLastUpdated = document.getElementById("last_update");
 
 // Declare a variable to store the user's input
 let inputValue;
-
-// Get start of the day in Unix (utc)
-const now = new Date();
-const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-const startofDayUnix = startOfDay.getTime() / 1000;
 
 // Event listener for toggling the display of the location selector
 toggleSelectLocation.addEventListener('click', () => {
@@ -38,7 +35,7 @@ inputLocation.addEventListener('focus', () => {
   inputLocation.select();
 });
 
-// Function to get the user's IP address
+// // Function to get the user's IP address
 async function getIpAddress() {
   try {
     const response = await fetch('https://api.ipify.org?format=json');
@@ -64,7 +61,7 @@ async function fetchAPI() {
     inputValue = inputLocation.value.trim();
 
     // Fetch data from the API using the user's input
-    const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=f44e471964df45d79da184125231904&q=${inputValue}`);
+    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=f44e471964df45d79da184125231904&q=${inputValue}`);
     const data = await response.json();
 
     // Extract relevant data from the API response
@@ -77,24 +74,49 @@ async function fetchAPI() {
     const windKph = data.current.wind_kph;
     const windDegree = data.current.wind_degree;
     const windDir = data.current.wind_dir;
+    const startofDayUnix = data.forecast.forecastday[0].date_epoch;
+    const lastUpdatedEpoch = data.current.last_updated_epoch;
+
+    // Find the first hour in the forecast after the current time
+    const hours = data.forecast.forecastday[0].hour;
+    const nextHour = hours.find(hour => hour.time_epoch > lastUpdatedEpoch);
+
+    // Extract the wind speed in kph for the next hour
+    const nextHourWindKph = nextHour.wind_kph;
 
     // Convert wind speed from km/h to knots and round to 1 decimal place
-    const windKn = (windKph * 0.539957).toFixed(1);
+    function kphToKnots(kph) {
+      return (kph * 0.539956803).toFixed(1);
+    }
+    const windKn = kphToKnots(windKph);
+
+
+
     // Determine the wind direction arrow based on the wind degree
     const windArrow = getWindArrow(windDegree);
 
     // Update the HTML elements with the extracted data
     locationName.textContent = name;
+    locationTemp.textContent = `${tempC}°C`;
     conditionIcon.src = `http:${icon}`;
     conditionWindDir.textContent = windDir;
     conditionWindKn.textContent = `${windKn} kn`;
     conditionWindArrow.textContent = windArrow;
     currentLastUpdated.textContent = lastUpdated;
 
+
+    
+    if (parseFloat(nextHourWindKph) >= parseFloat(windKph)) {
+      conditionWindPrev.textContent = "arrow_drop_up";
+      conditionWindPrev.style.color = "greenyellow";
+    } else {
+      conditionWindPrev.textContent = "arrow_drop_down";
+      conditionWindPrev.style.color = "red";
+    }
+
     fetch(`https://corsproxy.io/?https://api.marea.ooo/v2/tides?token=${mareatoken}&latitude=${lat}&longitude=${lon}&timestamp=${startofDayUnix}&interval=1&datum=LAT`)
     .then(response => response.json())
     .then(datamarea => {
-      console.log(datamarea)
       const tideData = datamarea.heights;
 
       //chart dimension
@@ -225,21 +247,25 @@ async function fetchAPI() {
   }
 }
 
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(setPosition);
-  } else {
-    alert('Geolocation is not supported by this browser.');
-  }
-}
-async function setPosition(position) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  const inputField = document.getElementById('input_location');
-  inputField.value = `${latitude},${longitude}`;
+async function getLocation() {
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const location = `${latitude},${longitude}`;
+        const inputField = document.getElementById('input_location');
+        inputField.value = location;
+        resolve(location);
+      }, error => reject(error));
+    } else {
+      reject(new Error('Geolocation is not supported by this browser.'));
+    }
+  });
 }
 
-// Call getIpAddress first to get the IP address, then call fetchAPI with the IP address as a parameter
+
+// // Call getIpAddress first to get the IP address, then call fetchAPI with the IP address as a parameter
 getIpAddress()
   .then(ipAddress => {
     if (inputLocation.value.trim() === '') {
