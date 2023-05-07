@@ -35,17 +35,6 @@ inputLocation.addEventListener('focus', () => {
   inputLocation.select();
 });
 
-// // Function to get the user's IP address
-async function getIpAddress() {
-  try {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip;
-  } catch (error) {
-    console.error('Error fetching IP address:', error);
-  }
-}
-
 // Function to determine the wind direction arrow based on the wind degree
 function getWindArrow(windDegree) {
   const arrows = ["north", "north_east", "east", "south_east", "south", "south_west", "west", "north_west"];
@@ -59,6 +48,9 @@ async function fetchAPI() {
   try {
     // Get the user's input and trim whitespace
     inputValue = inputLocation.value.trim();
+
+    // Store the value of myConst in Local Storage
+    localStorage.setItem("storedInputValue", inputValue);
 
     // Fetch data from the API using the user's input
     const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=f44e471964df45d79da184125231904&q=${inputValue}`);
@@ -254,8 +246,7 @@ async function getLocation() {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         const location = `${latitude},${longitude}`;
-        const inputField = document.getElementById('input_location');
-        inputField.value = location;
+        inputLocation.value = location;
         resolve(location);
       }, error => reject(error));
     } else {
@@ -264,11 +255,27 @@ async function getLocation() {
   });
 }
 
+// // Function to get the user's IP address
+async function getIpAddress() {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
+  } catch (error) {
+    console.error('Error fetching IP address:', error);
+  }
+}
+
+// Get the last value of myConst from Local Storage
+const lastValue = localStorage.getItem("storedInputValue");
 
 // // Call getIpAddress first to get the IP address, then call fetchAPI with the IP address as a parameter
 getIpAddress()
   .then(ipAddress => {
-    if (inputLocation.value.trim() === '') {
+    if (lastValue) {
+      inputLocation.value = lastValue;
+      fetchAPI(lastValue);
+    } else if (inputLocation.value.trim() === '') {
       inputLocation.value = ipAddress;
       fetchAPI(ipAddress);
     } else {
