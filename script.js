@@ -72,12 +72,6 @@ async function fetchAPI() {
     const localOffset = new Date().getTimezoneOffset() * 60; // get the local timezone offset in seconds
     const startofDayUnix = utcTimestamp + localOffset; // convert UTC Unix timestamp to local Unix timestamp
 
-    console.log(localTimestamp); // output the Unix timestamp for today's date at 12am local time
-
-
-
-
-
     // Find the first hour in the forecast after the current time
     const hours = data.forecast.forecastday[0].hour;
     const nextHour = hours.find(hour => hour.time_epoch > lastUpdatedEpoch);
