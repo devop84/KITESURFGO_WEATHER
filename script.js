@@ -66,8 +66,17 @@ async function fetchAPI() {
     const windKph = data.current.wind_kph;
     const windDegree = data.current.wind_degree;
     const windDir = data.current.wind_dir;
-    const startofDayUnix = data.forecast.forecastday[0].date_epoch;
     const lastUpdatedEpoch = data.current.last_updated_epoch;
+
+    const utcTimestamp = data.forecast.forecastday[0].date_epoch;
+    const localOffset = new Date().getTimezoneOffset() * 60; // get the local timezone offset in seconds
+    const startofDayUnix = utcTimestamp + localOffset; // convert UTC Unix timestamp to local Unix timestamp
+
+    console.log(localTimestamp); // output the Unix timestamp for today's date at 12am local time
+
+
+
+
 
     // Find the first hour in the forecast after the current time
     const hours = data.forecast.forecastday[0].hour;
