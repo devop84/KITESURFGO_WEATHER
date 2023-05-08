@@ -66,7 +66,6 @@ async function fetchAPI() {
     const windKph = data.current.wind_kph;
     const windDegree = data.current.wind_degree;
     const windDir = data.current.wind_dir;
-    const lastUpdatedEpoch = data.current.last_updated_epoch;
 
     const utcTimestamp = data.forecast.forecastday[0].date_epoch;
     const localOffset = new Date().getTimezoneOffset() * 60; // get the local timezone offset in seconds
